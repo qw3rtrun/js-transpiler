@@ -1,7 +1,6 @@
 package io.schinzel.jstranspiler.transpiler
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.schinzel.basic_utils_kotlin.toList
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
@@ -83,7 +82,7 @@ class KotlinEnum(private val enumClass: KClass<out Any>) : IToJavaScript {
                     PropertyType(name, type)
                 } ?: emptyList()
             // Add a "name" property first
-            return PropertyType("name", "String").toList() + enumProperties
+            return listOf(PropertyType("name", "String")) + enumProperties
         }
 
 

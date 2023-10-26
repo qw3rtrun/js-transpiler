@@ -1,6 +1,5 @@
 package io.schinzel.jstranspiler
 
-import io.schinzel.basic_utils_kotlin.println
 import io.schinzel.jstranspiler.transpiler.KotlinPackage
 import java.io.File
 
@@ -32,7 +31,7 @@ class JsTranspiler(sourcePackageNames: List<String>, destinationFile: String) {
         val jobExecutionTimeInSeconds = (System.nanoTime() - startExecutionTime) / 1_000_000_000
         val feedback = "JsTranspiler ran! Produced ${kotlinPackage.numberOfClassesAndEnums} JavaScript " +
                 "classes and enums from Kotlin in $jobExecutionTimeInSeconds seconds."
-        feedback.println()
+        println(feedback)
     }
 
 

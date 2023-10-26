@@ -16,43 +16,12 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>maven-repo.atexpose.com</id>
-            <url>https://s3-eu-west-1.amazonaws.com/maven-repo.atexpose.com/release</url>
-        </repository>
-        <repository>
-            <id>maven-repo.schinzel.io</id>
-            <url>https://s3-eu-west-1.amazonaws.com/maven-repo.schinzel.io/release</url>
-        </repository>
-    </repositories>
-
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>${schinzel-maven-repo}</id>
-            <url>s3://${schinzel-maven-repo}/snapshot</url>
-        </snapshotRepository>
-        <repository>
-            <id>${schinzel-maven-repo}</id>
-            <url>s3://${schinzel-maven-repo}/release</url>
-        </repository>
-    </distributionManagement>
-
-
     <dependencies>
         <dependency>
             <!-- Utilities. Must include as otherwise org.reflects 9.11 sets to early version. -->
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
-        </dependency>
-        <dependency>
-            <!-- Basic utilities. Most commonly less verbose versions of
-            common code snippets -->
-            <groupId>io.schinzel</groupId>
-            <artifactId>basic-utils-kotlin</artifactId>
-            <version>0.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
