@@ -1,6 +1,7 @@
 package io.schinzel.jstranspiler.transpiler
 
 import org.reflections.Reflections
+import org.reflections.util.ConfigurationBuilder
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -11,6 +12,7 @@ import kotlin.reflect.full.isSubclassOf
 internal class KotlinPackage(packageNames: List<String>) {
     //Generate a list of kotlin classes and enums from the argument list of package names
     private val listOfClassesAndEnums: List<KClass<out Any>> = packageNames.map { packageName ->
+        Reflections(ConfigurationBuilder().addClassLoaders())
         Reflections(packageName)
             .getTypesAnnotatedWith(JsTranspiler_CompileToJavaScript::class.java)
             .map { it.kotlin }

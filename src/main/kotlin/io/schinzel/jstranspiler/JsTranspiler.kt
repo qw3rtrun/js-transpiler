@@ -12,9 +12,9 @@ import java.io.File
  * @param destinationFile The name of the file into which the generated JavaScript will be written.
  * E.g. "src/main/resources/my_site/js/classes.js"
  */
-class JsTranspiler(sourcePackageNames: List<String>, destinationFile: String) {
+class JsTranspiler(sourceJarFile: String?, sourcePackageNames: List<String>, destinationFile: String) {
 
-    constructor(sourcePackageName: String, destinationFile: String) : this(listOf(sourcePackageName), destinationFile)
+    constructor(sourcePackageName: String, destinationFile: String) : this(null, listOf(sourcePackageName), destinationFile)
 
     init {
         val startExecutionTime = System.nanoTime()
