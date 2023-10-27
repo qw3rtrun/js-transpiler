@@ -1,7 +1,10 @@
 package io.schinzel.jstranspiler.transpiler
 
 import org.reflections.Reflections
+import org.reflections.scanners.Scanners
 import org.reflections.util.ConfigurationBuilder
+import java.net.URL
+import java.net.URLClassLoader
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -9,12 +12,23 @@ import kotlin.reflect.full.isSubclassOf
  * Purpose of this class is to construct the JavaScript code for all the data classes and enums in
  * a Kotlin package
  */
-internal class KotlinPackage(packageNames: List<String>) {
+internal class KotlinPackage(sourceFilePaths: List<URL>, packageNames: List<String>) {
+
+    constructor(packageNames: List<String>) : this(emptyList(), packageNames)
+
     //Generate a list of kotlin classes and enums from the argument list of package names
     private val listOfClassesAndEnums: List<KClass<out Any>> = packageNames.map { packageName ->
-        Reflections(ConfigurationBuilder().addClassLoaders())
-        Reflections(packageName)
-            .getTypesAnnotatedWith(JsTranspiler_CompileToJavaScript::class.java)
+        val configuration = ConfigurationBuilder()
+        if (sourceFilePaths.isNotEmpty()) {
+            configuration.forPackage(packageName, URLClassLoader(sourceFilePaths.toTypedArray()))
+        } else {
+            configuration.forPackage(packageName)
+        }
+//        Reflections(configuration)
+//            .getTypesAnnotatedWith(JsTranspiler_CompileToJavaScript::class.java)
+//            .map { it.kotlin }
+        Reflections(configuration)
+            .get(Scanners.SubTypes.of<Any>(Scanners.TypesAnnotated.with(JsTranspiler_CompileToJavaScript::class.java.simpleName)).asClass<Any>())
             .map { it.kotlin }
     }.flatten()
 

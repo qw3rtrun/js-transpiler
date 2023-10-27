@@ -2,6 +2,7 @@ package io.schinzel.jstranspiler
 
 import io.schinzel.jstranspiler.transpiler.KotlinPackage
 import java.io.File
+import java.net.URI
 
 /**
  * The main class for this project. Generates JavaScript code from the argument list of packages
@@ -12,15 +13,29 @@ import java.io.File
  * @param destinationFile The name of the file into which the generated JavaScript will be written.
  * E.g. "src/main/resources/my_site/js/classes.js"
  */
-class JsTranspiler(sourceJarFile: String?, sourcePackageNames: List<String>, destinationFile: String) {
+class JsTranspiler(sourcePaths: List<String>, sourcePackageNames: List<String>, destinationFile: String) {
 
-    constructor(sourcePackageName: String, destinationFile: String) : this(null, listOf(sourcePackageName), destinationFile)
+    constructor(sourcePackageName: String, destinationFile: String) : this(
+        emptyList(),
+        listOf(sourcePackageName),
+        destinationFile
+    )
+
+    constructor(sourcePath: String, sourcePackageName: String, destinationFile: String) : this(
+        listOf(sourcePath),
+        listOf(sourcePackageName),
+        destinationFile
+    )
 
     init {
         val startExecutionTime = System.nanoTime()
         // Check so that argument destination file name is ok
-        validateFile(destinationFile)
-        val kotlinPackage = KotlinPackage(sourcePackageNames)
+        validateJsFile(destinationFile)
+        val sourceURLs = sourcePaths.map {
+            validateJarFile(it)
+            URI(it).toURL()
+        }
+        val kotlinPackage = KotlinPackage(sourceURLs, sourcePackageNames)
         // Transpile all argument packages to JavaScript
         val javaScriptCode: String = kotlinPackage.toJavaScript()
         // File content is file header plus generated JavaScript code
@@ -36,9 +51,15 @@ class JsTranspiler(sourceJarFile: String?, sourcePackageNames: List<String>, des
 
 
     companion object {
-        private fun validateFile(fileName: String) {
+        private fun validateJsFile(fileName: String) {
             if (!fileName.endsWith(".js")) {
                 throw RuntimeException("Destination file must have the extension js")
+            }
+        }
+
+        private fun validateJarFile(fileName: String) {
+            if (!fileName.endsWith(".jar")) {
+                throw RuntimeException("Destination file must have the extension jar")
             }
         }
 

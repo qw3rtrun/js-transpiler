@@ -38,7 +38,6 @@
         </dependency>
         <dependency>
             <!-- For finding annotated classes https://github.com/ronmamo/reflections.
-            Cannot use 0.9.12 due to bug https://github.com/ronmamo/reflections/issues/273.
              If there is no enum in package or subpackage "SubTypeScanner was not configured" is
              thrown. -->
             <groupId>org.reflections</groupId>
